@@ -13,7 +13,7 @@ class DictBootstrap extends Command
      *
      * @var string
      */
-    protected $signature = 'dict:bootstrap {target} {--make} {--clean}';
+    protected $signature = 'dict:bootstrap {target} {block} {--make} {--clean}';
 
     /**
      * The console command description.
@@ -45,33 +45,38 @@ class DictBootstrap extends Command
         );
 
         $tables = array(
-            // LOOKUP TABLES
-            'lu_proficiency_levels' ,
-            'lu_priority_levels'    ,
-            'lu_difficulty_levels'  ,
-            'lu_tags'               ,
-            'lu_sources'            ,
-            'lu_revision_decks'     ,
-            'lu_word_cases'         ,
-            'lu_word_types'         ,
-            'lu_genders'            ,
-            // DATA TABLES
-            'de_words'              ,
-            'de_word_infos'         ,
-            'en_words'              ,
-            'de_sentences'          ,
-            'de_sentence_infos'     ,
-            'en_sentences'          ,
-            'de_word_noun_infos'    ,
-            'de_word_verb_infos'    ,
-            'de_word_prepo_infos'   ,
-            // MAP TABLES
-            'map_deword_enword'             ,
-            'map_desentence_ensentence'     ,
-            'map_desentence_deword'         ,
-            'map_ensentence_enword'         ,
-            'map_deword_tag'                ,
-            'map_deword_wordtype'           
+            'lu_tables' => [
+                // LOOKUP TABLES
+                'lu_proficiency_levels' ,
+                'lu_priority_levels'    ,
+                'lu_difficulty_levels'  ,
+                'lu_tags'               ,
+                'lu_sources'            ,
+                'lu_revision_decks'     ,
+                'lu_word_cases'         ,
+                'lu_word_types'         ,
+                'lu_genders'            
+            ],
+
+            'data_tables' => [
+                // DATA TABLES
+                'de_words'              ,
+                'de_word_infos'         ,
+                'en_words'              ,
+                'de_sentences'          ,
+                'de_sentence_infos'     ,
+                'en_sentences'          ,
+                'de_word_noun_infos'    ,
+                'de_word_verb_infos'    ,
+                'de_word_prepo_infos'   ,
+                // MAP TABLES
+                'map_deword_enword'             ,
+                'map_desentence_ensentence'     ,
+                'map_desentence_deword'         ,
+                'map_ensentence_enword'         ,
+                'map_deword_tag'                ,
+                'map_deword_wordtype'           
+            ]
         );
 
         $this->make_files($paths, $tables);
@@ -87,14 +92,21 @@ class DictBootstrap extends Command
 
     public function make_files($paths, $tables)
     {
-        $target = $this->argument('target');
-        $make = $this->option('make');
+        // VARIABLES
+        $target = $this->argument('target'); // migrations , models
+        $block = $this->argument('block'); // lu_tables , data_tables
+        // FLAGS
+        $make = $this->option('make'); 
         $clean = $this->option('clean');
-        $path = false;
+        // OTHER VARIABLES
 
         if(!in_array($target, array_keys($paths))) 
         {
             $this->error(" Invalid Argument {make} // select - migrations or models  ");
+        }
+        else if(!in_array($block, array_keys($tables))) 
+        {
+            $this->error(" Invalid Argument {block} // select - lu_tables or data_tables  ");
         }
         else 
         {
@@ -110,7 +122,7 @@ class DictBootstrap extends Command
     
             if($is_empty && $make == true) 
             {
-                foreach($tables as $table)
+                foreach($tables[$block] as $table)
                 {
                     if($target == 'migrations') $this->make_migration($table);
                     if($target == 'models') $this->make_model($table);
