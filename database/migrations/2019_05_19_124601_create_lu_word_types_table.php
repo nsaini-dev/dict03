@@ -14,8 +14,9 @@ class CreateLuWordTypesTable extends Migration
     public function up()
     {
         Schema::create('lu_word_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->smallIncrements('id');
+            $table->string('value', 30)->unique();
+            $table->string('short', 10)->nullable()->unique();
         });
     }
 

@@ -14,8 +14,10 @@ class CreateLuDifficultyLevelsTable extends Migration
     public function up()
     {
         Schema::create('lu_difficulty_levels', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->smallIncrements('id');
+            $table->string('value', 30)->unique();
+            $table->string('short', 10)->nullable()->unique();
+            $table->boolean('active')->default(TRUE);
         });
     }
 
