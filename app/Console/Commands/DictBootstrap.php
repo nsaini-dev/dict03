@@ -13,7 +13,7 @@ class DictBootstrap extends Command
      *
      * @var string
      */
-    protected $signature = 'dict:bootstrap {target} {block} {--make} {--clean}';
+    protected $signature = 'dict:bootstrap {target} {block} {--make} {--clean} {--force}';
 
     /**
      * The console command description.
@@ -98,6 +98,7 @@ class DictBootstrap extends Command
         // FLAGS
         $make = $this->option('make'); 
         $clean = $this->option('clean');
+        $force = $this->option('force');
         // OTHER VARIABLES
 
         if(!in_array($target, array_keys($paths))) 
@@ -113,7 +114,7 @@ class DictBootstrap extends Command
             $path = $paths[$target];
             $this->make_dir($path);
             $this->clean_dir($clean, $path);
-            $is_empty = $this->is_empty($path);
+            $is_empty = $this->is_empty($path, $force);
     
             if($make != true) {
                 $this->info("use option {--make} to create files");
@@ -200,16 +201,17 @@ class DictBootstrap extends Command
         }
     }
 
-    public function is_empty($path)
+    public function is_empty($path, $force)
     {
         $no_files = count(scandir($path));
         $is_empty = $no_files <= 2;
 
         if( ! $is_empty ) {
-            $this->warn("Not Empty :: $path // Clean before creating files. !! CAREFULL !!");
+            $this->warn("Not Empty :: $path // Clean before creating files !! CAREFULL !! OR use --force, be careful it will overwrite files");
         }
 
-        return $is_empty;
+        if($force) return true;
+        else return $is_empty;
     }
 
 
