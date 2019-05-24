@@ -14,7 +14,8 @@ class CreateDeWordsTable extends Migration
     public function up()
     {
         Schema::create('de_words', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
+            $table->string('value', 90)->unique();
             $table->timestamps();
         });
     }
