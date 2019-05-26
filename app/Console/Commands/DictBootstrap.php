@@ -61,14 +61,15 @@ class DictBootstrap extends Command
             'data_tables' => [
                 // DATA TABLES
                 'de_words'              ,
-                'de_word_infos'         ,
                 'en_words'              ,
                 'de_sentences'          ,
-                'de_sentence_infos'     ,
                 'en_sentences'          ,
-                'de_word_noun_infos'    ,
-                'de_word_verb_infos'    ,
-                'de_word_prepo_infos'   ,
+                // INFO TABLES
+                'info_de_words'         ,
+                'info_de_sentences'     ,
+                'info_de_nouns'    ,
+                'info_de_verbs'    ,
+                'info_de_prepos'   ,
                 // MAP TABLES
                 'map_deword_enword'             ,
                 'map_desentence_ensentence'     ,

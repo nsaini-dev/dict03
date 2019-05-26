@@ -14,8 +14,15 @@ class CreateMapDewordTagTable extends Migration
     public function up()
     {
         Schema::create('map_deword_tag', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->unsignedInteger('de_word_id');  // [PK] FK
+            $table->unsignedSmallInteger('tag_id'); // [PK] FK
+        });
+
+        Schema::table('map_deword_tag', function (Blueprint $table) {
+            $table->primary([ 'de_word_id', 'tag_id'  ]);
+            
+            $table->foreign('de_word_id')->references('id')->on('de_words');
+            $table->foreign('tag_id')->references('id')->on('lu_tags');
         });
     }
 
